@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itcast.mapper.UserMapper">
+
+    <select id="findAll" parameterType="map" resultType="user">
+        select * from user
+        <where>
+            <if test="name!=null and name.length>0">
+                AND name like "%"#{name}"%"
+            </if>
+
+            <if test="address!=null and address.length>0">
+                AND address like "%"#{address}"%"
+            </if>
+
+            <if test="email!=null and email.length>0">
+                AND email like "%"#{email}"%"
+            </if>
+        </where>
+        limit #{begin},#{rows}
+    </select>
+
+    <select id="findTotalCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM user
+        <where>
+            <if test="name!=null and name.length>0">
+                AND name like "%"#{name}"%"
+            </if>
+
+            <if test="address!=null and address.length>0">
+                AND address like "%"#{address}"%"
+            </if>
+
+            <if test="email!=null and email.length>0">
+                AND email like "%"#{email}"%"
+            </if>
+        </where>
+    </select>
+
+    <insert id="addUser" parameterType="user">
+        INSERT  INTO user VALUES(#{id},#{name},#{gender},#{age},#{address},#{qq},#{email},#{username},#{password})
+    </insert>
+
+    <update id="deleteUser" parameterType="string">
+        delete from user where id =#{id}
+    </update>
+
+    <select id="findById" parameterType="string" resultType="user">
+        SELECT * from user where id=#{id}
+    </select>
+
+    <update id="updateUser" parameterType="user">
+        UPDATE user SET name=#{name},gender=#{gender},age=#{age},address=#{address},qq=#{qq},email=#{email},password=#{password} where id=#{id}
+    </update>
+
+    <select id="findUser" parameterType="user" resultType="user">
+        SELECT * from user where username=#{username} and password=#{password}
+    </select>
+
+    <select id="findByUserName" resultType="user" parameterType="string">
+        SELECT * FROM user where username=#{username}
+    </select>
+</mapper>
